@@ -1,6 +1,6 @@
 ﻿using Photon.Realtime;
 using UnityEngine.Events;
 
-namespace PunUtils.Events {
+namespace Utils.Pun.Events {
 	public class PunPlayerEvent : UnityEvent<Player> { }
 }
