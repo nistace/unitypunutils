@@ -9,8 +9,14 @@ using Utils.StaticUtils;
 
 namespace Utils.Pun.Extensions {
 	public static class PunHashtableExtension {
-		public static int Int(this Hashtable table, string name, int defaultValue = default) => table.TryInt(name, out var value) ? value : defaultValue;
+		public static int Int(this Hashtable table, string name, int defaultValue = default) {
+			if (table.TryInt(name, out var value)) return value;
+			if (table.TryLong(name, out var longValue)) return (int) longValue;
+			return defaultValue;
+		}
+
 		public static bool TryInt(this Hashtable table, string name, out int value) => table.TryGet(name, out value, Parse.Int);
+		public static bool TryLong(this Hashtable table, string name, out long value) => table.TryGet(name, out value, Parse.Long);
 		public static byte Byte(this Hashtable table, string name, byte defaultValue = default) => table.TryByte(name, out var value) ? value : defaultValue;
 		public static bool TryByte(this Hashtable table, string name, out byte value) => table.TryGet(name, out value, Parse.Byte);
 		public static string String(this Hashtable table, string name, string defaultValue = default) => table.TryString(name, out var value) ? value : defaultValue;

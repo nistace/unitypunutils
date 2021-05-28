@@ -8,8 +8,8 @@ using Utils.Pun.Saving;
 
 namespace Utils.Pun.Id {
 	public static class DataKeys {
-		public static string Child(string root, string childName) => $"{root}.{childName}";
-		public static string Item(string root, int index) => $"{root}.{index}";
+		public static string Child(string root, string childName) => string.IsNullOrEmpty(root) ? childName : $"{root}.{childName}";
+		public static string Item(string root, int index) => string.IsNullOrEmpty(root) ? $"{index}" : $"{root}.{index}";
 
 		public static void SaveList<E>(Hashtable data, string root, IReadOnlyList<E> items) where E : ISaveToHashtable {
 			data.Define(root, items.Count);
@@ -38,12 +38,12 @@ namespace Utils.Pun.Id {
 			return result;
 		}
 
-		public static void SaveListOfIds<E>(Hashtable data, string root, IReadOnlyList<E> items) where E : DataScriptableObject {
+		public static void SaveListOfIds<E>(Hashtable data, string root, IReadOnlyList<E> items) where E : IData {
 			data.Define(root, items.Count);
 			items.ForEach((t, i) => data.Define(Item(root, i), t.id));
 		}
 
-		public static E[] LoadListFromIds<E>(Hashtable data, string root, IReadOnlyDictionary<int, E> dictionary) where E : DataScriptableObject {
+		public static E[] LoadListFromIds<E>(Hashtable data, string root, IReadOnlyDictionary<int, E> dictionary) where E : IData {
 			var result = new E[data.Int(root)];
 			for (var i = 0; i < result.Length; ++i) result[i] = dictionary[data.Int(Item(root, i))];
 			return result;
