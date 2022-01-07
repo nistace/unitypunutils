@@ -1,7 +1,6 @@
 ﻿using Photon.Pun;
 using UnityEngine;
-using Utils.Extensions;
-using Utils.StaticUtils;
+using Utils.Extensions;	
 using Object = UnityEngine.Object;
 
 namespace Utils.Pun.Libraries.Network {
@@ -22,6 +21,11 @@ namespace Utils.Pun.Libraries.Network {
 		}
 
 		public static void LoadLibrary(NetworkPrefabsLibrary libraryToLoad) {
+			if (!instance) {
+				var newInstance = new GameObject("NetworkPrefabs");
+				newInstance.AddComponent<NetworkPrefabs>();
+				DontDestroyOnLoad(newInstance);
+			}
 			library = libraryToLoad;
 			if (library) library.Load();
 		}
